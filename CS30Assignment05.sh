@@ -10,25 +10,28 @@
 # ##########################################
 
 #!/bin/bash
-set -o xtrace
+
 echo "Please enter your username or a command:"
 
-read userEntry
-firstArg=${userEntry%% *}
+read userEntry	# store user input in $userEntry
 
-echo $1 "=echo"
+	  	# extract the first word to test if it is a command
+firstArg=${userEntry%% *} 
 
-if hash $firstArg; then
-  $userEntry
+if hash $firstArg 2>/dev/null; then # hash tests if command
+  $userEntry	# command is executed
 
-# check to see if input is the username
-# parameter: $userEnrtry, the user's input
-# returns: email to user, command output or error
+  		# check to see if input is the username
 elif [[ $userEntry == $USER ]]; then #if so send email to user
-   echo "$(last $USER | head -1 | cut -c 40-58)" | mail -s "I'm watching you" $userEntry"@"$HOSTNAME
-   echo "david1" $logTime
-else 
 
+		# last returns last login data, head -1 limits to one
+	       	# line and cut -c extracts the date and time
+		# mail emails to the user, -s is the subject
+   echo "$(last $USER | head -1 | cut -c 40-58)" \
+	   | mail -s "I'm watching you" $userEntry"@"$HOSTNAME
+
+		# if no conditions met, falls through to an error message    
+else 
 echo "You did not enter a username or a viable command,
 check to make sure you have permission" 
 fi
