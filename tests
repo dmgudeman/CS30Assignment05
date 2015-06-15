@@ -1,0 +1,7 @@
+#!/bin/bash
+set -ov xtrace
+export PS4='$0 line $LINENO:'
+INPUT=$USER
+SUBSTRING=$(last $USER | head -1 | cut -c 40-59)
+echo "$SUBSTRING" | mail -s "hi" $USER
+echo $SUBSTRING
